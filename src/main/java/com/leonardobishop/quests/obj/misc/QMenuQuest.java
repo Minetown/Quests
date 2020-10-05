@@ -109,7 +109,11 @@ public class QMenuQuest implements QMenu {
                 if (!owner.getQuestProgressFile().hasMetRequirements(quest)) {
                     List<String> quests = new ArrayList<>();
                     for (String requirement : quest.getRequirements()) {
-                        quests.add(Quests.get().getQuestManager().getQuestById(requirement).getDisplayNameStripped());
+                        Quest requirementQuest = Quests.get().getQuestManager().getQuestById(requirement);
+                        if (!owner.getQuestProgressFile().hasQuestProgress(requirementQuest) ||
+                                !owner.getQuestProgressFile().getQuestProgress(quest).isCompletedBefore()) {
+                            quests.add(requirementQuest.getDisplayNameStripped());
+                        }
                     }
                     Map<String, String> placeholders = new HashMap<>();
                     placeholders.put("{quest}", quest.getDisplayNameStripped());
